@@ -1,0 +1,19 @@
+{
+  "name": "project_mobilerobot",
+  "version": "1.0.0",
+  "description": "final project for arduinoJS course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "project_mobilerobot"
+  },
+  "author": "adi cohen",
+  "license": "ISC",
+  "dependencies": {
+    "johnny-five": "^2.1.0"
+  }
+}
