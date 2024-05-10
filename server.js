@@ -1,4 +1,4 @@
-const { Board, Led, Servo, Proximity } = require("johnny-five");
+const { Board, Led, Servo, Proximity, Motor } = require("johnny-five");
 const board = new Board();
 const opn = require("opn");
 
@@ -7,17 +7,31 @@ const startUrl = `http://localhost:${port}`;
 const boardPort = "COM6";
 
 //pin setup
-opn(`${startUrl}`);
+const pwmFront = 9;
+const cdirFrontRightMotor = 22;
+const dirFrontRightMotor = 24;
+const dirFrontLeftMotor = 26;
+const cdirFrontLeftMotor = 28;
+
+// opn(`${startUrl}`);
 
 board.on("ready", () => {
-  const servo = new Servo({ pin: 13, center: true, range: [45, 135], fps: 6 });
+  const servo = new Servo({ pin: 13, startAt: 90, range: [45, 135], fps: 6 });
+  const flMotor = new Motor({
+    pins: {
+      pwm: pwmFront,
+      dir: dirFrontRightMotor,
+      cdir: cdirFrontRightMotor,
+    },
+  });
   //   const proximity = new Proximity({
   //     controller: "HCSR04",
   //     pin: 30,
   //   });
 
   board.repl.inject({
-    servo,
+    // servo,
+    flMotor,
   });
 
   //   proximity.on("change", () => {
@@ -27,5 +41,9 @@ board.on("ready", () => {
   //     console.log("  in  : ", inches);
   //     console.log("-----------------");
   //   });
-  servo.sweep();
+  flMotor.forward(255);
+  setTimeout(() => {
+    flMotor.stop();
+  }, 1000);
+  //   servo.sweep();
 });

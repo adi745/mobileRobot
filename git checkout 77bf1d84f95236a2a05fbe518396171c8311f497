@@ -1,0 +1,11 @@
+[33mcommit 4a24b70a4cb215e8363c62eec2b85754ec715b88[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: adi <adi745@users.noreply.github.com>
+Date:   Fri May 10 10:03:16 2024 +0300
+
+    added an automated browser loading
+
+[33mcommit 77bf1d84f95236a2a05fbe518396171c8311f497[m
+Author: adi <adi745@users.noreply.github.com>
+Date:   Fri May 10 09:42:37 2024 +0300
+
+    started creating the server side
