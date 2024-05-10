@@ -93,26 +93,50 @@ board.on("ready", () => {
   });
 
   app.get("/leftFrontOn", (req, res) => {
-    res.send("LEFT MOTOR ON!");
+    res.send("LEFT FRONT MOTOR ON!");
     motorsF[1].forward(200);
     res.sendStatus(200);
   });
 
   app.get("/leftFrontStop", (req, res) => {
-    res.send("LEFT MOTOR STOP!");
+    res.send("LEFT FRONT MOTOR STOP!");
     motorsF[1].stop();
     res.sendStatus(200);
   });
 
   app.get("/rightFrontOn", (req, res) => {
-    res.send("RIGHT MOTOR ON!");
+    res.send("RIGHT FRONT MOTOR ON!");
     motorsF[0].forward(200);
     res.sendStatus(200);
   });
 
   app.get("/rightFrontStop", (req, res) => {
-    res.send("RIGHT MOTOR STOP!");
+    res.send("RIGHT FRONT MOTOR STOP!");
     motorsF[0].stop();
+    res.sendStatus(200);
+  });
+
+  app.get("/leftBackOn", (req, res) => {
+    res.send("LEFT BACK MOTOR ON!");
+    motorsB[1].forward(200);
+    res.sendStatus(200);
+  });
+
+  app.get("/leftBackStop", (req, res) => {
+    res.send("LEFT BACK MOTOR STOP!");
+    motorsB[1].stop();
+    res.sendStatus(200);
+  });
+
+  app.get("/rightBackOn", (req, res) => {
+    res.send("RIGHT BACK MOTOR ON!");
+    motorsB[0].forward(200);
+    res.sendStatus(200);
+  });
+
+  app.get("/rightBackStop", (req, res) => {
+    res.send("RIGHT BACK MOTOR STOP!");
+    motorsB[0].stop();
     res.sendStatus(200);
   });
 
