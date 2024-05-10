@@ -30,7 +30,7 @@ app.use(cors());
 
 board.on("ready", () => {
   console.log("board is ready....");
-  //   const servo = new Servo({ pin: 13, startAt: 90, range: [45, 135], fps: 6 });
+  const servo = new Servo({ pin: 13, startAt: 90, range: [45, 135], fps: 6 });
   const motorsF = new Motors([
     {
       //right motor
@@ -85,7 +85,7 @@ board.on("ready", () => {
   //   });
 
   board.repl.inject({
-    // servo,
+    servo,
     // frMotor,
     // flMotor,
     motorsF,
@@ -140,6 +140,14 @@ board.on("ready", () => {
     res.sendStatus(200);
   });
 
+  app.get("/angle", (req, res) => {
+    // console.log(req.query.demand);
+    const servoDemand = req.query.demand;
+    console.log(`servo angle demand is: ${servoDemand}`);
+    servo.stop;
+    servo.to(servoDemand, 50);
+    res.sendStatus(200);
+  });
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
   });

@@ -6,6 +6,9 @@ const leftBackOn = document.getElementById("left-back-on");
 const leftBackStop = document.getElementById("left-back-stop");
 const rightBackOn = document.getElementById("right-back-on");
 const rightBackStop = document.getElementById("right-back-stop");
+const moveServo = document.getElementById("move-servo");
+const slider = document.getElementById("slider");
+const output = document.getElementById("servo-angle");
 
 leftFrontOn.addEventListener("click", () => {
   fetch("http://localhost:3000/leftFrontOn");
@@ -39,11 +42,15 @@ rightBackStop.addEventListener("click", () => {
   fetch("http://localhost:3000/rightBackStop");
 });
 
-const slider = document.getElementById("slider");
-const output = document.getElementById("servo-angle");
-output.innerHTML = slider.value; // Display the default slider value
-
 // Update the current slider value (each time you drag the slider handle)
 slider.oninput = function () {
   output.innerHTML = this.value;
 };
+
+output.innerHTML = slider.value; // Display the default slider value
+const sliderValue = output.innerHTML;
+
+slider.addEventListener("input", () => {
+  //   console.log(slider.value);
+  fetch("http://localhost:3000/angle?demand=" + slider.value);
+});
