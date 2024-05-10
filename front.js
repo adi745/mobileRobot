@@ -1,3 +1,7 @@
+const port = 3000;
+const startUrl = `http://localhost:${port}`;
+// opn(`${startUrl}`);
+
 const leftFrontOn = document.getElementById("left-front-on");
 const leftFrontStop = document.getElementById("left-front-stop");
 const rightFrontOn = document.getElementById("right-front-on");
@@ -11,35 +15,35 @@ const slider = document.getElementById("slider");
 const output = document.getElementById("servo-angle");
 
 leftFrontOn.addEventListener("click", () => {
-  fetch("http://localhost:3000/leftFrontOn");
+  socket.emit(`${startUrl}/leftFrontOn`);
 });
 
 leftFrontStop.addEventListener("click", () => {
-  fetch("http://localhost:3000/leftFrontStop");
+  socket.emit("leftFrontStop");
 });
 
 rightFrontOn.addEventListener("click", () => {
-  fetch("http://localhost:3000/rightFrontOn");
+  socket.emit("rightFrontOn");
 });
 
 rightFrontStop.addEventListener("click", () => {
-  fetch("http://localhost:3000/rightFrontStop");
+  socket.emit("rightFrontStop");
 });
 
 leftBackOn.addEventListener("click", () => {
-  fetch("http://localhost:3000/leftBackOn");
+  socket.emit("leftBackOn");
 });
 
 leftBackStop.addEventListener("click", () => {
-  fetch("http://localhost:3000/leftBackStop");
+  socket.emit("leftBackStop");
 });
 
 rightBackOn.addEventListener("click", () => {
-  fetch("http://localhost:3000/rightBackOn");
+  socket.emit("rightBackOn");
 });
 
 rightBackStop.addEventListener("click", () => {
-  fetch("http://localhost:3000/rightBackStop");
+  socket.emit("rightBackStop");
 });
 
 // Update the current slider value (each time you drag the slider handle)
@@ -50,7 +54,7 @@ slider.oninput = function () {
 output.innerHTML = slider.value; // Display the default slider value
 const sliderValue = output.innerHTML;
 
-slider.addEventListener("input", () => {
-  //   console.log(slider.value);
-  fetch("http://localhost:3000/angle?demand=" + slider.value);
+slider.addEventListener("input", (event) => {
+  let demand = event.slider;
+  socket.emit("demand", demand);
 });

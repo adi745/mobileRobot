@@ -4,9 +4,61 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MobileRobotApp</title>
-    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const socket = io();
+    </script>
     <h1>ArduinoJS course final project</h1>
   </head>
+  <style>
+    .button {
+      border-radius: 50px;
+      background: linear-gradient(145deg, #673535, #7a3f3f);
+      color: antiquewhite;
+      gap: 12px;
+    }
+    .space {
+      padding: 50px;
+    }
+    .slide-container {
+      width: 100%;
+    }
+    /* The slider itself */
+    .slider {
+      -webkit-appearance: none; /* Override default CSS styles */
+      appearance: none;
+      width: 100%; /* Full-width */
+      height: 25px; /* Specified height */
+      background: #d3d3d3; /* Grey background */
+      outline: none; /* Remove outline */
+      opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+      -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+      transition: opacity 0.2s;
+    }
+
+    /* Mouse-over effects */
+    .slider:hover {
+      opacity: 1; /* Fully shown on mouse-over */
+    }
+
+    /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none; /* Override default look */
+      appearance: none;
+      width: 25px; /* Set a specific slider handle width */
+      height: 25px; /* Slider handle height */
+      background: #04aa6d; /* Green background */
+      cursor: pointer; /* Cursor on hover */
+    }
+
+    .slider::-moz-range-thumb {
+      width: 25px; /* Set a specific slider handle width */
+      height: 25px; /* Slider handle height */
+      background: #04aa6d; /* Green background */
+      cursor: pointer; /* Cursor on hover */
+    }
+  </style>
   <body>
     <button class="button" id="left-front-on">LEFT FRONT ON</button>
     <button class="button" id="left-front-stop">LEFT FRONT STOP</button>
@@ -23,5 +75,67 @@
       <p>Servo angle: <span id="servo-angle"></span></p>
     </div>
   </body>
-  <script src="front.js"></script>
+  <script>
+    const leftFrontOn = document.getElementById("left-front-on");
+    const leftFrontStop = document.getElementById("left-front-stop");
+    const rightFrontOn = document.getElementById("right-front-on");
+    const rightFrontStop = document.getElementById("right-front-stop");
+    const leftBackOn = document.getElementById("left-back-on");
+    const leftBackStop = document.getElementById("left-back-stop");
+    const rightBackOn = document.getElementById("right-back-on");
+    const rightBackStop = document.getElementById("right-back-stop");
+    const moveServo = document.getElementById("move-servo");
+    const slider = document.getElementById("slider");
+    const output = document.getElementById("servo-angle");
+
+    leftFrontOn.addEventListener("click", () => {
+      socket.emit("leftFrontOn");
+    });
+
+    leftFrontStop.addEventListener("click", () => {
+      socket.emit("leftFrontStop");
+    });
+
+    rightFrontOn.addEventListener("click", () => {
+      socket.emit("rightFrontOn");
+    });
+
+    rightFrontStop.addEventListener("click", () => {
+      socket.emit("rightFrontStop");
+    });
+
+    leftBackOn.addEventListener("click", () => {
+      socket.emit("leftBackOn");
+    });
+
+    leftBackStop.addEventListener("click", () => {
+      socket.emit("leftBackStop");
+    });
+
+    rightBackOn.addEventListener("click", () => {
+      socket.emit("rightBackOn");
+    });
+
+    rightBackStop.addEventListener("click", () => {
+      socket.emit("rightBackStop");
+    });
+
+    slider.addEventListener("input", function () {
+      const demand = this.value;
+      output.innerHTML = demand;
+      console.log("Sending slider value:", demand);
+      socket.emit("sliderValueChanged", demand); // Send value to server
+    });
+    //  // Update the current slider value (each time you drag the slider handle)
+    //  slider.oninput = function () {
+    //       output.innerHTML = this.value;
+    //     };
+    // output.innerHTML = slider.value; // Display the default slider value
+    // const sliderValue = output.innerHTML;
+
+    // slider.addEventListener("input", () => {
+    //   let demand = output.value;
+    //   socket.emit("demand", demand);
+    // });
+  </script>
 </html>
