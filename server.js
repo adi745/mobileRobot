@@ -1,10 +1,13 @@
 const { Board, Led, Servo, Proximity } = require("johnny-five");
 const board = new Board();
-// const port = 3000;
-// const startUrl = `http://localhost:${port}`;
-// const boardPort = "COM6";
+const opn = require("opn");
+
+const port = 5500;
+const startUrl = `http://localhost:${port}`;
+const boardPort = "COM6";
 
 //pin setup
+opn(`${startUrl}`);
 
 board.on("ready", () => {
   const servo = new Servo({ pin: 13, center: true, range: [45, 135], fps: 6 });
