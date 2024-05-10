@@ -12,11 +12,16 @@
     <button class="button" id="left-front-stop">LEFT FRONT STOP</button>
     <button class="button" id="right-front-on">RIGHT FRONT ON</button>
     <button class="button" id="right-front-stop">RIGHT FRONT STOP</button>
-    <div id="space"></div>
+    <div class="space"></div>
     <button class="button" id="left-back-on">LEFT BACK ON</button>
     <button class="button" id="left-back-stop">LEFT BACK STOP</button>
     <button class="button" id="right-back-on">RIGHT BACK ON</button>
     <button class="button" id="right-back-stop">RIGHT BACK STOP</button>
+    <div class="space"></div>
+    <div class="slide-container">
+      <input type="range" min="0" max="180" value="90" id="slider" />
+      <p>Servo angle: <span id="servo-angle"></span></p>
+    </div>
   </body>
   <script src="front.js"></script>
 </html>

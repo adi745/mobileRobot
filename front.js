@@ -38,3 +38,12 @@ rightBackOn.addEventListener("click", () => {
 rightBackStop.addEventListener("click", () => {
   fetch("http://localhost:3000/rightBackStop");
 });
+
+const slider = document.getElementById("slider");
+const output = document.getElementById("servo-angle");
+output.innerHTML = slider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function () {
+  output.innerHTML = this.value;
+};
