@@ -133,9 +133,20 @@ board.on("ready", () => {
       //   servo.center();
       // }
     });
-    user.on("moveY", (moveY) => {
-      console.log(`y mouse coordinate: ${moveY}`);
+    user.on("move", (direction) => {
+      // Control the motor based on the direction received
+      console.log(direction);
+      if (direction === "forward") {
+        motorsF.forward(255);
+      } else if (direction === "backward") {
+        motorsF.reverse(255);
+      } else {
+        motorsF.stop();
+      }
     });
+    // user.on("moveY", (moveY) => {
+    //   console.log(`y mouse coordinate: ${moveY}`);
+    // });
     //
     // socket.on("disconnect", () => {
     //   console.log("Client disconnected");user.on("moveX", (moveX) => {
@@ -147,85 +158,4 @@ board.on("ready", () => {
   server.listen(3000, () => {
     console.log("server running at http://localhost:3000");
   });
-
-  //   app.get("/leftFrontOn", (req, res) => {
-  //     res.send("LEFT FRONT MOTOR ON!");
-  //     motorsF[1].forward(200);
-  //     res.sendStatus(200);
-  //   });
-
-  //   app.get("/leftFrontStop", (req, res) => {
-  //     res.send("LEFT FRONT MOTOR STOP!");
-  //     motorsF[1].stop();
-  //     res.sendStatus(200);
-  //   });
-
-  //   app.get("/rightFrontOn", (req, res) => {
-  //     res.send("RIGHT FRONT MOTOR ON!");
-  //     motorsF[0].forward(200);
-  //     res.sendStatus(200);
-  //   });
-
-  //   app.get("/rightFrontStop", (req, res) => {
-  //     res.send("RIGHT FRONT MOTOR STOP!");
-  //     motorsF[0].stop();
-  //     res.sendStatus(200);
-  //   });
-
-  //   app.get("/leftBackOn", (req, res) => {
-  //     res.send("LEFT BACK MOTOR ON!");
-  //     motorsB[1].forward(200);
-  //     res.sendStatus(200);
-  //   });
-
-  //   app.get("/leftBackStop", (req, res) => {
-  //     res.send("LEFT BACK MOTOR STOP!");
-  //     motorsB[1].stop();
-  //     res.sendStatus(200);
-  //   });
-
-  //   app.get("/rightBackOn", (req, res) => {
-  //     res.send("RIGHT BACK MOTOR ON!");
-  //     motorsB[0].forward(200);
-  //     res.sendStatus(200);
-  //   });
-
-  //   app.get("/rightBackStop", (req, res) => {
-  //     res.send("RIGHT BACK MOTOR STOP!");
-  //     motorsB[0].stop();
-  //     res.sendStatus(200);
-  //   });
-
-  //   app.get("/angle", (req, res) => {
-  //     // console.log(req.query.demand);
-  //     const servoDemand = req.query.demand;
-  //     console.log(`servo angle demand is: ${servoDemand}`);
-  //     servo.stop;
-  //     servo.to(servoDemand, 50);
-  //     res.sendStatus(200);
-  //   });
-  //   app.listen(port, () => {
-  //     console.log(`Example app listening on port ${port}`);
-  //   });
-  //   //   proximity.on("change", () => {
-  //   //     const { centimeters, inches } = proximity;
-  //   //     console.log("Proximity: ");
-  //   //     console.log("  cm  : ", centimeters);
-  //   //     console.log("  in  : ", inches);
-  //   //     console.log("-----------------");
-  //   //   });
-  //   console.log("AGV starts to move");
-  //   motorsF.forward(255);
-  //   motorsB.forward(255);
-  //   servo.sweep();
-  //   //   frMotor.forward(255);
-  //   setTimeout(() => {
-  //     // motorsF.stop();
-  //     motorsB.stop();
-  //     // frMotor.stop();
-  //   }, 4000);
-  //   setTimeout(() => {
-  //     servo.center(1000);
-  //     servo.stop;
-  //   });
 });

@@ -26,10 +26,14 @@
     <div class="slide-container">
       <input id="slider" type="range" min="30" max="150" value="90" />
       <p>Servo demand angle: <span id="servo-angle"></span></p>
+      <p>Servo actual angle: <span id="servo-position"></span></p>
     </div>
     <div class="space"></div>
-    <h2>Servo actual angle:</h2>
-    <h2 id="servo-position"></h2>
+    <div id="container">
+      touch control
+      <div id="controller"></div>
+      <div id="target"></div>
+    </div>
   </body>
   <script>
     const leftFrontOn = document.getElementById("left-front-on");
@@ -44,6 +48,10 @@
     const slider = document.getElementById("slider");
     const output = document.getElementById("servo-angle");
     const servoPosition = document.getElementById("servo-position");
+    const controller = document.getElementById("controller");
+    const target = document.getElementById("target");
+    const container = document.getElementById("container");
+    let isDragging = false;
 
     leftFrontOn.addEventListener("click", () => {
       socket.emit("leftFrontOn");
@@ -89,11 +97,80 @@
       servoPosition.innerText = data;
     });
 
-    window.addEventListener("mousemove", (event) => {
-      let moveY = event.clientY;
-      let moveX = event.clientX;
-      socket.emit("moveY", moveY);
-      // socket.emit("moveX", moveX);
+    controller.addEventListener("mousedown", startDrag);
+    controller.addEventListener("touchstart", startDrag);
+
+    function startDrag(event) {
+      event.preventDefault();
+      isDragging = true;
+
+      document.addEventListener("mousemove", drag);
+      document.addEventListener("touchmove", drag);
+
+      document.addEventListener("mouseup", stopDrag);
+      document.addEventListener("touchend", stopDrag);
+    }
+
+    function drag(event) {
+      if (!isDragging) return;
+
+      const rect = container.getBoundingClientRect();
+      const offsetX = event.clientX - rect.left - controller.offsetWidth / 2;
+      const offsetY = event.clientY - rect.top - controller.offsetHeight / 2;
+
+      const maxX = rect.width - controller.offsetWidth;
+      const maxY = rect.height - controller.offsetHeight;
+
+      const x = Math.min(Math.max(offsetX, 0), maxX);
+      const y = Math.min(Math.max(offsetY, 0), maxY);
+
+      controller.style.left = x + "px";
+      controller.style.top = y + "px";
+
+      // Calculate the position of the controller relative to the target
+      const targetRect = target.getBoundingClientRect();
+      const controllerX = x + controller.offsetWidth / 2;
+      const controllerY = y + controller.offsetHeight / 2;
+
+      const relativeX = controllerX - targetRect.left - target.offsetWidth / 2;
+      const relativeY = controllerY - targetRect.top - target.offsetHeight / 2;
+
+      // Emit relative position to control motors
+      const direction = calculateDirection(relativeX, relativeY);
+      console.log(direction); // Replace with socket.io emit
+    }
+
+    function stopDrag() {
+      isDragging = false;
+      document.removeEventListener("mousemove", drag);
+      document.removeEventListener("touchmove", drag);
+      document.removeEventListener("mouseup", stopDrag);
+      document.removeEventListener("touchend", stopDrag);
+    }
+
+    function calculateDirection(x, y) {
+      // Example logic: Convert relative position to motor control commands
+      let direction = "";
+      if (x < -10) {
+        direction += "left";
+      } else if (x > 10) {
+        direction += "right";
+      }
+
+      if (y < -10) {
+        direction += "forward";
+      } else if (y > 10) {
+        direction += "backward";
+      }
+      return direction;
+    }
+
+    socket.on("connect_error", (err) => {
+      console.log(`connect_error due to ${err.message}`);
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log(`disconnect due to ${reason}`);
     });
     //  // Update the current slider value (each time you drag the slider handle)
     //  slider.oninput = function () {

@@ -44,3 +44,26 @@
   background: #04aa6d; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
+#container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  border: 1px solid #000;
+  background-color: #a84b4b;
+}
+#controller {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: blue;
+  cursor: pointer;
+}
+#target {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
