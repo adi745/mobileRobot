@@ -29,6 +29,7 @@ const dirBackLeftMotor = 8;
 const pwmBackL = 12;
 
 // app.use(cors());
+app.use(express.static("public"));
 
 app.get("/", (req, res) => {
   res.sendFile(join(__dirname, "index.html"));
@@ -36,7 +37,7 @@ app.get("/", (req, res) => {
 
 board.on("ready", () => {
   console.log("board is ready....");
-  const servo = new Servo({ pin: 13, startAt: 90, range: [45, 135], fps: 6 });
+  const servo = new Servo({ pin: 13, startAt: 90, range: [45, 135] });
   const motorsF = new Motors([
     {
       //right motor
@@ -127,9 +128,9 @@ board.on("ready", () => {
       // }
     });
 
-    socket.on("disconnect", () => {
-      console.log("Client disconnected");
-    });
+    // socket.on("disconnect", () => {
+    //   console.log("Client disconnected");
+    // });
   });
 
   server.listen(3000, () => {
