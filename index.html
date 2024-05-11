@@ -131,13 +131,21 @@
       const targetRect = target.getBoundingClientRect();
       const controllerX = x + controller.offsetWidth / 2;
       const controllerY = y + controller.offsetHeight / 2;
-
-      const relativeX = controllerX - targetRect.left - target.offsetWidth / 2;
-      const relativeY = controllerY - targetRect.top - target.offsetHeight / 2;
+      console.log(`controllerX: ${controllerX}`);
+      console.log(`controllerY: ${controllerY}`);
+      console.log(`targetRect.left: ${targetRect.left}`);
+      console.log(`targetRect.top: ${targetRect.top}`);
+      console.log(`target.offsetWidth / 2: ${target.offsetWidth / 2}`);
+      console.log(`target.offsetHeight / 2: ${target.offsetHeight / 2}`);
+      const relativeX = controllerX - target.offsetWidth / 2;
+      const relativeY = controllerY - target.offsetHeight / 2;
 
       // Emit relative position to control motors
+      console.log(`relativeX: ${relativeX}`);
+      console.log(`relativeY: ${relativeY}`);
       const direction = calculateDirection(relativeX, relativeY);
-      console.log(direction); // Replace with socket.io emit
+      // console.log(direction); // Replace with socket.io emit
+      socket.emit("move-agv", direction);
     }
 
     function stopDrag() {
@@ -153,13 +161,13 @@
       let direction = "";
       if (x < -10) {
         direction += "left";
-      } else if (x > 10) {
+      } else if (x > 160) {
         direction += "right";
       }
 
       if (y < -10) {
         direction += "forward";
-      } else if (y > 10) {
+      } else if (y > 160) {
         direction += "backward";
       }
       return direction;

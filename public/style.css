@@ -63,6 +63,7 @@
   width: 100px;
   height: 100px;
   background-color: red;
+  opacity: 0.5;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

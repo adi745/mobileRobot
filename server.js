@@ -133,16 +133,78 @@ board.on("ready", () => {
       //   servo.center();
       // }
     });
-    user.on("move", (direction) => {
+    user.on("move-agv", (direction) => {
       // Control the motor based on the direction received
       console.log(direction);
-      if (direction === "forward") {
-        motorsF.forward(255);
-      } else if (direction === "backward") {
-        motorsF.reverse(255);
-      } else {
-        motorsF.stop();
+      switch (direction) {
+        case "forward":
+          motorsF.forward(200);
+          motorsB.forward(200);
+          break;
+        case "backward":
+          motorsF.reverse(200);
+          motorsB.reverse(200);
+          break;
+        case "rightforward":
+          motorsF[1].forward(150); //leftFront
+          motorsF[0].forward(50); //rightFront
+          motorsB[1].forward(150); //leftBack
+          motorsB[0].forward(50); //rightBack
+          break;
+        case "leftforward":
+          motorsF[1].forward(50); //leftFront
+          motorsF[0].forward(150); //rightFront
+          motorsB[1].forward(50); //leftBack
+          motorsB[0].forward(150); //rightBack
+          break;
+        case "right":
+          motorsF[0].reverse(50); //leftFront
+          motorsF[1].forward(50); //rightFront
+          motorsB[0].reverse(50); //leftBack
+          motorsB[1].forward(50); //rightBack
+          break;
+        case "left":
+          motorsF[1].reverse(50); //leftFront
+          motorsF[0].forward(50); //rightFront
+          motorsB[1].reverse(50); //leftBack
+          motorsB[0].forward(50); //rightBack
+          break;
+        case "rightbackward":
+          motorsF[1].reverse(150); //leftFront
+          motorsF[0].reverse(50); //rightFront
+          motorsB[1].reverse(150); //leftBack
+          motorsB[0].reverse(50); //rightBack
+          break;
+        case "leftbackward":
+          motorsF[1].reverse(50); //leftFront
+          motorsF[0].reverse(150); //rightFront
+          motorsB[1].reverse(50); //leftBack
+          motorsB[0].reverse(150); //rightBack
+          break;
+        default:
+          motorsF.stop();
+          motorsB.stop();
+          break;
       }
+      // if (direction === "forward") {
+      //   motorsF.forward(200);
+      // } else if (direction === "backward") {
+      //   motorsF.reverse(200);
+      // } else if (direction === "rightforward") {
+      //   motorsF[1].forward(200);
+      //   motorsF[0].forward(50);
+      // } else if (direction === "leftforward") {
+      //   motorsF[1].forward(50);
+      //   motorsF[0].forward(200);
+      // } else if (direction === "rightbackward") {
+      //   motorsF[1].reverse(200);
+      //   motorsF[0].reverse(50);
+      // } else if (direction === "leftbackward") {
+      //   motorsF[1].reverse(50);
+      //   motorsF[0].reverse(200);
+      // } else {
+      //   motorsF.stop();
+      // }
     });
     // user.on("moveY", (moveY) => {
     //   console.log(`y mouse coordinate: ${moveY}`);
