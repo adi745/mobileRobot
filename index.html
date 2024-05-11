@@ -34,6 +34,10 @@
       <div id="controller"></div>
       <div id="target"></div>
     </div>
+    <div class="sonar-container">
+      <div class="sonar"></div>
+    </div>
+    <p>Sonar reading:<span id="sonarRValue"> </span></p>
   </body>
   <script>
     const leftFrontOn = document.getElementById("left-front-on");
@@ -51,6 +55,8 @@
     const controller = document.getElementById("controller");
     const target = document.getElementById("target");
     const container = document.getElementById("container");
+    const sonarRaw = document.getElementById("sonarRValue");
+    const sonar = document.querySelector(".sonar");
     let isDragging = false;
 
     leftFrontOn.addEventListener("click", () => {
@@ -90,6 +96,12 @@
       output.innerHTML = demand;
       // console.log("Sending slider value:", demand);
       socket.emit("sliderValueChanged", demand); // Send value to server
+    });
+
+    // Listen for sonar data
+    socket.on("sonarData", (data) => {
+      sonarRaw.innerText = data; // Adjust multiplier as needed
+      sonar.style.height = `${data * 2}px`; // Adjust multiplier as needed
     });
 
     //getting info back to the screen

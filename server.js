@@ -1,4 +1,12 @@
-const { Board, Led, Servo, Proximity, Motor, Motors } = require("johnny-five");
+const {
+  Board,
+  Led,
+  Servo,
+  Proximity,
+  Motor,
+  Motors,
+  Sensor,
+} = require("johnny-five");
 const express = require("express");
 const { createServer } = require("node:http");
 const { join } = require("node:path");
@@ -27,6 +35,8 @@ const dirBackRightMotor = 6;
 const cdirBackLeftMotor = 7;
 const dirBackLeftMotor = 8;
 const pwmBackL = 12;
+
+const ultraPin = "A0";
 
 // app.use(cors());
 app.use(express.static("public"));
@@ -73,10 +83,11 @@ board.on("ready", () => {
     },
   ]);
 
-  //   const proximity = new Proximity({
-  //     controller: "HCSR04",
-  //     pin: 30,
-  //   });
+  sonar = new Sensor({
+    pin: ultraPin,
+    freq: 100,
+    threshold: 5,
+  });
 
   // board.repl.inject({
   //   servo,
@@ -86,6 +97,10 @@ board.on("ready", () => {
 
   io.on("connection", (user) => {
     console.log("a user connected");
+    sonar.on("data", function () {
+      let sonarRaw = this.value / 4;
+      user.emit("sonarData", sonarRaw);
+    });
 
     user.on("leftFrontOn", () => {
       motorsF[1].forward(200);
