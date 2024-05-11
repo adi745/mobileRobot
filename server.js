@@ -78,11 +78,11 @@ board.on("ready", () => {
   //     pin: 30,
   //   });
 
-  board.repl.inject({
-    servo,
-    motorsF,
-    motorsB,
-  });
+  // board.repl.inject({
+  //   servo,
+  //   motorsF,
+  //   motorsB,
+  // });
 
   io.on("connection", (user) => {
     console.log("a user connected");
@@ -121,15 +121,26 @@ board.on("ready", () => {
 
     user.on("sliderValueChanged", (demand) => {
       console.log(`servo angle demand is: ${demand}`);
-      servo.stop;
-      servo.to(demand);
+      // servo.stop;
+      servo.to(demand, 10);
+      // if (servo.on) {
+      //   servo.stop;
+      // }
+      servo.on("move:complete", function () {
+        user.emit("servo-position-value", this.value);
+      });
       // if (servo.position > 160 || servo.position < 20) {
       //   servo.center();
       // }
     });
-
+    user.on("moveY", (moveY) => {
+      console.log(`y mouse coordinate: ${moveY}`);
+    });
+    //
     // socket.on("disconnect", () => {
-    //   console.log("Client disconnected");
+    //   console.log("Client disconnected");user.on("moveX", (moveX) => {
+    //   console.log(`x mouse coordinate: ${moveX}`);
+    // });
     // });
   });
 

@@ -12,54 +12,6 @@
     <h1>ArduinoJS course final project</h1>
   </head>
   <link rel="stylesheet" href="style.css" />
-  <!-- <style>
-    .button {
-      border-radius: 50px;
-      background: linear-gradient(145deg, #673535, #7a3f3f);
-      color: antiquewhite;
-      gap: 12px;
-    }
-    .space {
-      padding: 50px;
-    }
-    .slide-container {
-      width: 100%;
-    }
-    /* The slider itself */
-    .slider {
-      -webkit-appearance: none; /* Override default CSS styles */
-      appearance: none;
-      width: 100%; /* Full-width */
-      height: 25px; /* Specified height */
-      background: #d3d3d3; /* Grey background */
-      outline: none; /* Remove outline */
-      opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-      -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
-      transition: opacity 0.2s;
-    }
-
-    /* Mouse-over effects */
-    .slider:hover {
-      opacity: 1; /* Fully shown on mouse-over */
-    }
-
-    /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
-    .slider::-webkit-slider-thumb {
-      -webkit-appearance: none; /* Override default look */
-      appearance: none;
-      width: 25px; /* Set a specific slider handle width */
-      height: 25px; /* Slider handle height */
-      background: #04aa6d; /* Green background */
-      cursor: pointer; /* Cursor on hover */
-    }
-
-    .slider::-moz-range-thumb {
-      width: 25px; /* Set a specific slider handle width */
-      height: 25px; /* Slider handle height */
-      background: #04aa6d; /* Green background */
-      cursor: pointer; /* Cursor on hover */
-    }
-  </style> -->
   <body>
     <button class="button" id="left-front-on">LEFT FRONT ON</button>
     <button class="button" id="left-front-stop">LEFT FRONT STOP</button>
@@ -73,8 +25,11 @@
     <div class="space"></div>
     <div class="slide-container">
       <input id="slider" type="range" min="30" max="150" value="90" />
-      <p>Servo angle: <span id="servo-angle"></span></p>
+      <p>Servo demand angle: <span id="servo-angle"></span></p>
     </div>
+    <div class="space"></div>
+    <h2>Servo actual angle:</h2>
+    <h2 id="servo-position"></h2>
   </body>
   <script>
     const leftFrontOn = document.getElementById("left-front-on");
@@ -88,6 +43,7 @@
     const moveServo = document.getElementById("move-servo");
     const slider = document.getElementById("slider");
     const output = document.getElementById("servo-angle");
+    const servoPosition = document.getElementById("servo-position");
 
     leftFrontOn.addEventListener("click", () => {
       socket.emit("leftFrontOn");
@@ -124,8 +80,20 @@
     slider.addEventListener("input", function () {
       const demand = this.value;
       output.innerHTML = demand;
-      console.log("Sending slider value:", demand);
+      // console.log("Sending slider value:", demand);
       socket.emit("sliderValueChanged", demand); // Send value to server
+    });
+
+    //getting info back to the screen
+    socket.on("servo-position-value", (data) => {
+      servoPosition.innerText = data;
+    });
+
+    window.addEventListener("mousemove", (event) => {
+      let moveY = event.clientY;
+      let moveX = event.clientX;
+      socket.emit("moveY", moveY);
+      // socket.emit("moveX", moveX);
     });
     //  // Update the current slider value (each time you drag the slider handle)
     //  slider.oninput = function () {
