@@ -1,11 +1,10 @@
 const {
   Board,
-  Led,
   Servo,
   Proximity,
-  Motor,
   Motors,
   Sensor,
+  Sensors,
 } = require("johnny-five");
 const express = require("express");
 const { createServer } = require("node:http");
@@ -19,9 +18,9 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 
-const boardPort = "COM6";
-
 //pin setup
+const ultraServoPin = 13;
+
 const pwmFrontR = 9;
 const cdirFrontRightMotor = 22;
 const dirFrontRightMotor = 24;
@@ -43,7 +42,6 @@ const distancPin2 = "A2";
 const distancPin3 = "A3";
 const distancPin4 = "A4";
 
-// app.use(cors());
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
@@ -52,7 +50,12 @@ app.get("/", (req, res) => {
 
 board.on("ready", () => {
   console.log("board is ready....");
-  const servo = new Servo({ pin: 13, startAt: 90, range: [45, 135] });
+  const servo = new Servo({
+    pin: ultraServoPin,
+    startAt: 90,
+    range: [45, 135],
+  });
+  //front wheels motors
   const motorsF = new Motors([
     {
       //right motor
@@ -73,6 +76,7 @@ board.on("ready", () => {
       invertPWM: false,
     },
   ]);
+  //back wheels motors
   const motorsB = new Motors([
     {
       pins: {
@@ -93,32 +97,14 @@ board.on("ready", () => {
   //   freq: 100,
   //   threshold: 5,
   // });
-
-  distance0 = new Sensor({
-    pin: distancPin0,
-    freq: 100,
-    threshold: 5,
-  });
-  distance1 = new Sensor({
-    pin: distancPin1,
-    freq: 100,
-    threshold: 5,
-  });
-  distance2 = new Sensor({
-    pin: distancPin2,
-    freq: 100,
-    threshold: 5,
-  });
-  distance3 = new Sensor({
-    pin: distancPin3,
-    freq: 100,
-    threshold: 5,
-  });
-  distance4 = new Sensor({
-    pin: distancPin4,
-    freq: 100,
-    threshold: 5,
-  });
+  // initiating an array of 5 sensors
+  const distance = new Sensors([
+    { pin: distancPin0 },
+    { pin: distancPin1 },
+    { pin: distancPin2 },
+    { pin: distancPin3 },
+    { pin: distancPin4 },
+  ]);
 
   // const sonar = new Proximity({
   //   controller: "HCSR04",
@@ -133,13 +119,15 @@ board.on("ready", () => {
 
   io.on("connection", (user) => {
     console.log("a user connected");
-    distance0.on("data", function () {
+    // console.log(`distance.scaleTo(10, 0), ${distance.scaleTo(10, 0)}`);
+    distance[0].on("data", function () {
       let sonarRaw =
-        distance0.scaleTo(10, 0) +
-        distance1.scaleTo(10, 0) +
-        distance2.scaleTo(10, 0) +
-        distance3.scaleTo(10, 0) +
-        distance4.scaleTo(10, 0); //this.value;
+        (distance[0].scaleTo(10, 0) +
+          distance[1].scaleTo(10, 0) +
+          distance[2].scaleTo(10, 0) +
+          distance[3].scaleTo(10, 0) +
+          distance[4].scaleTo(10, 0)) /
+        1; //this.value;
       user.emit("sonarData", sonarRaw);
     });
 
