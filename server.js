@@ -36,7 +36,12 @@ const cdirBackLeftMotor = 7;
 const dirBackLeftMotor = 8;
 const pwmBackL = 12;
 
-const ultraPin = "A0";
+// const ultraPin = "A0";
+const distancPin0 = "A0";
+const distancPin1 = "A1";
+const distancPin2 = "A2";
+const distancPin3 = "A3";
+const distancPin4 = "A4";
 
 // app.use(cors());
 app.use(express.static("public"));
@@ -83,11 +88,42 @@ board.on("ready", () => {
     },
   ]);
 
-  sonar = new Sensor({
-    pin: ultraPin,
+  // sonar = new Sensor({
+  //   pin: ultraPin,
+  //   freq: 100,
+  //   threshold: 5,
+  // });
+
+  distance0 = new Sensor({
+    pin: distancPin0,
     freq: 100,
     threshold: 5,
   });
+  distance1 = new Sensor({
+    pin: distancPin1,
+    freq: 100,
+    threshold: 5,
+  });
+  distance2 = new Sensor({
+    pin: distancPin2,
+    freq: 100,
+    threshold: 5,
+  });
+  distance3 = new Sensor({
+    pin: distancPin3,
+    freq: 100,
+    threshold: 5,
+  });
+  distance4 = new Sensor({
+    pin: distancPin4,
+    freq: 100,
+    threshold: 5,
+  });
+
+  // const sonar = new Proximity({
+  //   controller: "HCSR04",
+  //   pin: 7,
+  // });
 
   // board.repl.inject({
   //   servo,
@@ -97,8 +133,13 @@ board.on("ready", () => {
 
   io.on("connection", (user) => {
     console.log("a user connected");
-    sonar.on("data", function () {
-      let sonarRaw = this.value / 4;
+    distance0.on("data", function () {
+      let sonarRaw =
+        distance0.scaleTo(10, 0) +
+        distance1.scaleTo(10, 0) +
+        distance2.scaleTo(10, 0) +
+        distance3.scaleTo(10, 0) +
+        distance4.scaleTo(10, 0); //this.value;
       user.emit("sonarData", sonarRaw);
     });
 

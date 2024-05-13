@@ -101,7 +101,8 @@
     // Listen for sonar data
     socket.on("sonarData", (data) => {
       sonarRaw.innerText = data; // Adjust multiplier as needed
-      sonar.style.height = `${data * 2}px`; // Adjust multiplier as needed
+      sonar.style.height = `${data * 4}px`; // Adjust multiplier as needed
+      sonar.style.width = `${data * 4}px`;
     });
 
     //getting info back to the screen

@@ -1,3 +1,13 @@
+body {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 0.5) 0%,
+    rgba(94, 58, 167, 0.5) 29%,
+    rgba(0, 212, 255, 0.5) 100%
+  );
+}
+
 .button {
   border-radius: 50px;
   background: linear-gradient(145deg, #673535, #7a3f3f);
